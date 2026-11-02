@@ -5,7 +5,7 @@ from google.genai import types
 from gtts import gTTS
 
 # ---------- SETTINGS ----------
-MODEL = "gemini-3.5-flash"  # if this name stops working, check aistudio.google.com for the current Flash model
+MODEL = "gemini-3.8-flash"  # if this name stops working, check aistudio.google.com for the current Flash model
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # ---------- KNOWLEDGE BASE (add 10-20 verified entries from OFFICIAL sites) ----------
