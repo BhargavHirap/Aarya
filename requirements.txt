@@ -1,3 +1,4 @@
-streamlit
-google-genai
-gTTS
+app.py
+core.py
+schemes.json
+requirements.txt
