@@ -1,110 +1,106 @@
+import io
 import streamlit as st
-from deep_translator import GoogleTranslator
+from google import genai
+from google.genai import types
+from gtts import gTTS
 
-# --- PAGE SETUP - PROFESSIONAL LOOK ---
-st.set_page_config(
-    page_title="MahaSahayak AI - Professional",
-    page_icon="🙏",
-    layout="wide"
+# ---------- SETTINGS ----------
+MODEL = "gemini-2.0-flash"  # if this name stops working, check aistudio.google.com for the current Flash model
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+
+# ---------- KNOWLEDGE BASE (add 10-20 verified entries from OFFICIAL sites) ----------
+KNOWLEDGE = [
+    {
+        "title": "Rajarshi Chhatrapati Shahu Maharaj Shikshan Shulkh Shishyavrutti Yojana",
+        "info": "Fee concession for eligible students in Maharashtra. VERIFY details on the official site before using.",
+        "link": "https://mahadbt.maharashtra.gov.in",
+    },
+    {
+        "title": "MahaDBT Scholarship Portal",
+        "info": "Single portal to apply for many Maharashtra scholarships. Needs Aadhaar, income certificate, caste certificate (if applicable), marksheets, bank passbook.",
+        "link": "https://mahadbt.maharashtra.gov.in",
+    },
+]
+
+def find_relevant(question):
+    """Very simple keyword search. Upgrade to embeddings later."""
+    words = set(question.lower().split())
+    scored = []
+    for item in KNOWLEDGE:
+        text = (item["title"] + " " + item["info"]).lower()
+        score = sum(1 for w in words if w in text)
+        scored.append((score, item))
+    scored.sort(key=lambda x: x[0], reverse=True)
+    return [i for s, i in scored[:3]]
+
+SYSTEM = (
+    "तू MahaSahayak AI आहेस, महाराष्ट्रातील नागरिकांना सरकारी योजना समजावणारा सहाय्यक. "
+    "नेहमी सोप्या मराठीत उत्तर दे. फक्त दिलेल्या माहितीवर आधारित उत्तर दे. "
+    "माहिती नसेल तर तसे सांग आणि अधिकृत संकेतस्थळ तपासायला सांग. उत्तर लहान ठेव."
 )
 
-# Custom CSS for professional look
-st.markdown("""
-<style>
-.main-header { background: linear-gradient(90deg, #FF6F00 0%, #FF8F00 100%); padding:20px; border-radius:15px; color:white; text-align:center; }
-.scheme-card { background:white; padding:15px; border-radius:10px; border-left:5px solid #FF6F00; box-shadow:0 2px 5px #ddd; margin:10px 0; }
-</style>
-""", unsafe_allow_html=True)
+def ask_ai(question, simple_mode):
+    docs = find_relevant(question)
+    context = "\n".join(f"- {d['title']}: {d['info']} ({d['link']})" for d in docs)
+    extra = "अतिशय सोप्या भाषेत, लहान वाक्यांत सांग." if simple_mode else ""
+    prompt = f"माहिती:\n{context}\n\nप्रश्न: {question}\n{extra}"
+    r = client.models.generate_content(
+        model=MODEL,
+        contents=prompt,
+        config=types.GenerateContentConfig(system_instruction=SYSTEM),
+    )
+    return r.text
 
-st.markdown('<div class="main-header"><h1>🙏 MahaSahayak AI | महासहायक AI</h1><p>Professional Government Scheme Assistant - English | हिंदी | मराठी</p></div>', unsafe_allow_html=True)
+def transcribe(audio_bytes):
+    r = client.models.generate_content(
+        model=MODEL,
+        contents=[
+            types.Part.from_bytes(data=audio_bytes, mime_type="audio/wav"),
+            "हे मराठी बोलणे आहे. फक्त शब्दशः लिहून दे, दुसरे काही नको.",
+        ],
+    )
+    return r.text.strip()
 
-# --- MULTILINGUAL DATABASE ---
-# Key in English, Hindi, Marathi - so it works in all languages
-schemes_db = {
-    "scholarship": {
-        "keywords": ["scholarship", "शिष्यवृत्ती", "छात्रवृत्ति", "shishyavrutti", "students"],
-        "mr": "महाडीबीटी https://mahadbt.maharashtra.gov.in वर शिष्यवृत्तीसाठी अर्ज करा. आवश्यक: आधार, उत्पन्न दाखला, जातीचा दाखला.",
-        "en": "Apply for scholarship on MahaDBT: https://mahadbt.maharashtra.gov.in. Docs: Aadhaar, Income certificate.",
-        "hi": "छात्रवृत्ति के लिए महाडीबीटी https://mahadbt.maharashtra.gov.in पर आवेदन करें।"
-    },
-    "farmer": {
-        "keywords": ["farmer", "शेतकरी", "किसान", "shetkari", "pm kisan", "kisan"],
-        "mr": "पीएम किसान सन्मान निधी - वर्षाला 6000 रु. pmkisan.gov.in वर अर्ज करा.",
-        "en": "PM Kisan Samman Nidhi - Rs. 6000 per year. Apply on pmkisan.gov.in",
-        "hi": "पीएम किसान योजना - सालाना 6000 रु. pmkisan.gov.in पर आवेदन करें।"
-    },
-    "ration": {
-        "keywords": ["ration", "रेशन", "राशन", "ration card"],
-        "mr": "रेशन कार्डसाठी mahafood.gov.in वर अर्ज करा. सेतू केंद्रातही अर्ज होतो.",
-        "en": "For Ration Card, apply on mahafood.gov.in or visit Setu Kendra.",
-        "hi": "राशन कार्ड के लिए mahafood.gov.in पर आवेदन करें।"
-    },
-    "sanjay gandhi": {
-        "keywords": ["sanjay gandhi", "संजय गांधी", "निराधार", "niradhar"],
-        "mr": "संजय गांधी निराधार योजना - दरमहा 1000 रु. तहसील कार्यालयात अर्ज करा.",
-        "en": "Sanjay Gandhi Niradhar Scheme - Rs.1000 per month. Apply at Tahsil office.",
-        "hi": "संजय गांधी निराधार योजना - हर महीने 1000 रु. तहसील में आवेदन करें।"
-    }
-}
+def speak(text):
+    buf = io.BytesIO()
+    gTTS(text=text, lang="mr").write_to_fp(buf)
+    return buf.getvalue()
 
-def translate_to_marathi(text):
-    try:
-        return GoogleTranslator(source='auto', target='mr').translate(text)
-    except:
-        return text
+# ---------- UI ----------
+st.set_page_config(page_title="MahaSahayak AI", page_icon="🙏")
+large = st.toggle("मोठे अक्षर")
+simple = st.toggle("सोपी भाषा")
+if large:
+    st.markdown("<style>html, body, p, div {font-size:22px !important}</style>", unsafe_allow_html=True)
 
-def detect_and_answer(user_input, output_lang):
-    user_input_lower = user_input.lower()
-    
-    # Search in all keywords
-    for scheme, data in schemes_db.items():
-        for kw in data["keywords"]:
-            if kw in user_input_lower:
-                if output_lang == "मराठी": return data["mr"]
-                elif output_lang == "हिंदी": return data["hi"]
-                else: return data["en"]
-    
-    # If no keyword match, translate question to Marathi for display
-    translated = translate_to_marathi(user_input)
-    return f"**Translated to Marathi:** {translated}\n\n" + "या प्रश्नाची माहिती लवकरच जोडत आहोत. कृपया महाडीबीटी पोर्टल तपासा: https://mahadbt.maharashtra.gov.in"
+st.title("🙏 MahaSahayak AI")
+st.caption("तंत्रज्ञान सर्वांसाठी, आपल्या मराठी भाषेत.")
 
-# --- UI ---
-col1, col2 = st.columns([3, 1])
+if "chat" not in st.session_state:
+    st.session_state.chat = []
 
-with col1:
-    st.write("### 💬 Ask anything / काहीही विचारा")
-    user_lang = st.radio("Answer Language / उत्तराची भाषा:", ["मराठी", "English", "हिंदी"], horizontal=True)
-    
-    question = st.text_input("Type here (English, Hindi or Marathi):", 
-                             placeholder="Ex: I need scholarship info / मला शिष्यवृत्ती हवी आहे / मुझे छात्रवृत्ति चाहिए")
+voice = st.audio_input("🎤 बोला")
+typed = st.chat_input("तुमचा प्रश्न लिहा...")
 
-    if st.button("🔍 Get Information / माहिती मिळवा", type="primary", use_container_width=True):
-        if question:
-            with st.spinner("Searching..."):
-                answer = detect_and_answer(question, user_lang)
-                st.markdown(f'<div class="scheme-card"><h3>✅ Answer:</h3><p style="font-size:18px">{answer}</p></div>', unsafe_allow_html=True)
-                
-                # Show translation
-                if user_lang != "मराठी":
-                    marathi_version = translate_to_marathi(answer)
-                    st.info(f"**मराठीत:** {marathi_version}")
-        else:
-            st.warning("Please enter your question / कृपया प्रश्न लिहा")
+question = None
+if voice is not None and st.session_state.get("last_voice") != voice.size:
+    st.session_state.last_voice = voice.size
+    question = transcribe(voice.getvalue())
+elif typed:
+    question = typed
 
-with col2:
-    st.markdown("### 📋 Available Topics")
-    st.write("Try typing:")
-    st.code("scholarship\nfarmer scheme\nration card\nSanjay Gandhi Yojana\nशिष्यवृत्ती\nशेतकरी")
-    
-    st.markdown("### 🌐 Professional Features")
-    st.markdown("""
-    - ✅ English → Marathi Translation
-    - ✅ Hindi → Marathi Translation  
-    - ✅ Hinglish Support
-    - ✅ Professional UI
-    - ✅ Mobile Friendly
-    - ✅ Free & Open Source
-    """)
+if question:
+    answer = ask_ai(question, simple)
+    st.session_state.chat.append((question, answer))
 
-st.markdown("---")
-st.caption("© 2025 MahaSahayak AI - Built for Maharashtra | Professional Version")
+for q, a in st.session_state.chat:
+    with st.chat_message("user"):
+        st.write(q)
+    with st.chat_message("assistant"):
+        st.write(a)
+
+if st.session_state.chat:
+    if st.button("🔊 उत्तर ऐका"):
+        st.audio(speak(st.session_state.chat[-1][1]), format="audio/mp3")
+
+st.info("ही माहिती नमुना आहे. अर्ज करण्यापूर्वी अधिकृत संकेतस्थळ तपासा.")
