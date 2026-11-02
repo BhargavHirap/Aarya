@@ -1,16 +1,17 @@
 [
   {
-    "name": {"mr": "शिष्यवृत्ती माहिती", "hi": "छात्रवृत्ति जानकारी", "en": "Scholarship information"},
-    "description": {
-      "mr": "पात्रता, कागदपत्रे आणि अर्ज प्रक्रिया अधिकृत पोर्टलवर तपासा.",
-      "hi": "पात्रता, दस्तावेज़ और आवेदन प्रक्रिया आधिकारिक पोर्टल पर देखें।",
-      "en": "Check eligibility, documents and application steps on the official portal."
-    },
+    "id": "scholarship-demo",
+    "name": {"mr": "शिष्यवृत्ती", "hi": "छात्रवृत्ति", "en": "Scholarship"},
+    "purpose": {"mr": "TO_VERIFY", "hi": "TO_VERIFY", "en": "TO_VERIFY"},
+    "eligibility": {"mr": "TO_VERIFY", "hi": "TO_VERIFY", "en": "TO_VERIFY"},
+    "documents": {"mr": "TO_VERIFY", "hi": "TO_VERIFY", "en": "TO_VERIFY"},
+    "process": {"mr": "TO_VERIFY", "hi": "TO_VERIFY", "en": "TO_VERIFY"},
     "keywords": {
       "mr": ["शिष्यवृत्ती", "स्कॉलरशिप"],
       "hi": ["छात्रवृत्ति", "स्कॉलरशिप"],
       "en": ["scholarship"]
     },
-    "source": "https://mahadbt.maharashtra.gov.in/"
+    "source": "https://mahadbt.maharashtra.gov.in/",
+    "last_verified": "TO_VERIFY"
   }
 ]
