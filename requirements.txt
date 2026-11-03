@@ -1,6 +1,5 @@
-app.py
-core.py
-schemes.json
-requirements.txt
 streamlit>=1.40,<2
+transformers>=4.40
+torch
+accelerate
 requests>=2.32,<3
