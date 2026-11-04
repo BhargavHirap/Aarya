@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Aarya",
+    "slug": "aarya",
+    "scheme": "aarya",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": { "backgroundColor": "#F8F3E9" },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.aarya.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "आर्या तुमचा आवाज ऐकण्यासाठी मायक्रोफोन वापरते. / Aarya uses the microphone for voice input."
+      }
+    },
+    "android": {
+      "package": "com.aarya.app",
+      "permissions": ["RECORD_AUDIO"]
+    },
+    "plugins": ["expo-router", "expo-speech", "expo-av"],
+    "extra": { "router": { "origin": false } }
+  }
+}
