@@ -1,0 +1,112 @@
+import type { Language } from './types';
+
+export const strings: Record<Language, Record<string, string>> = {
+  mr: {
+    appName: 'आर्या',
+    welcome:
+      'नमस्कार! मी आर्या. सरकारी योजना असोत किंवा तुमचे प्रश्न, भावना, अभ्यास, काम आणि रोजचे निर्णय — आपण कोणत्याही विषयावर बोलू शकतो. आज मनात काय आहे?',
+    placeholder: 'तुमचा प्रश्न लिहा…',
+    send: 'पाठवा',
+    thinking: 'आर्या विचार करतेय…',
+    readAloud: 'उत्तर ऐक',
+    retry: 'पुन्हा प्रयत्न',
+    errorGeneric: 'काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.',
+    errorNetwork: 'नेटवर्क समस्या. कृपया इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.',
+    errorTooLong: 'तुमचा संदेश खूप लांब आहे.',
+    micUnavailable: 'मराठी आवाज ओळख सेवा अद्याप जोडलेली नाही.',
+    ttsUnavailable: 'आवाज सेवा उपलब्ध नाही.',
+    clearChat: 'संभाषण साफ करा',
+    clearConfirm: 'हे संभाषण साफ करायचे का?',
+    disclaimer:
+      'आर्या हे AI मार्गदर्शन साधन आहे. हे वैद्यकीय, कायदेशीर, आर्थिक किंवा सरकारी निर्णयाचा पर्याय नाही. सरकारी योजना, पात्रता आणि तारखा अधिकृत स्रोतांवर तपासा.',
+    'tabs.ask': 'विचारा',
+    'tabs.schemes': 'योजना',
+    'tabs.eligibility': 'पात्रता',
+    emptyTitle: 'तुम्ही मला काहीही विचारू शकता',
+    'schemes.title': 'सरकारी योजना',
+    'schemes.verifyBanner': 'माहिती अधिकृत पोर्टलवर तपासा.',
+    'schemes.openOfficial': 'अधिकृत वेबसाइट उघडा',
+    'schemes.lastVerified': 'शेवटची पडताळणी',
+    'schemes.searchPlaceholder': 'योजना शोधा…',
+    'eligibility.title': 'पात्रता तपासा',
+    'eligibility.q1': 'तुम्हाला कोणत्या प्रकारची मदत हवी आहे?',
+    'eligibility.q2': 'तुम्ही कोणत्या राज्यात/ठिकाणी राहता?',
+    'eligibility.q3': 'तुमची शिक्षण/कामाची स्थिती?',
+    'eligibility.q4': 'तुम्हाला योजनेच्या अटींची माहिती आहे का?',
+    'eligibility.q5': 'तुमच्याकडे कोणती कागदपत्रे आहेत?',
+    'eligibility.submit': 'पुढे',
+    'eligibility.back': 'मागे',
+    'eligibility.resultTitle': 'प्राथमिक मार्गदर्शन',
+    'eligibility.preliminaryNotice':
+      'Preliminary guidance, not an official government decision.',
+    'eligibility.nextSteps': 'पुढील पावले',
+    'eligibility.checklist': 'कागदपत्रांची यादी',
+    'eligibility.verifyReminder': 'अधिकृत पोर्टलवर पडताळणी करा.',
+    'eligibility.reset': 'पुन्हा सुरू करा',
+  },
+  en: {
+    appName: 'Aarya',
+    welcome:
+      'Hi, I’m Aarya. You can talk to me about your questions, feelings, studies, work, plans, relationships, government schemes, or everyday life.',
+    placeholder: 'Type your message…',
+    send: 'Send',
+    thinking: 'Aarya is thinking…',
+    readAloud: 'Read answer',
+    retry: 'Retry',
+    errorGeneric: 'Something went wrong. Please try again.',
+    errorNetwork: 'Network issue. Please check your connection and retry.',
+    errorTooLong: 'Your message is too long.',
+    micUnavailable: 'Marathi speech input is not connected yet.',
+    ttsUnavailable: 'Voice output is unavailable.',
+    clearChat: 'Clear chat',
+    clearConfirm: 'Clear this conversation?',
+    disclaimer:
+      'Aarya is an AI guidance tool. It is not a medical, legal, financial or government authority. Verify government schemes, eligibility and deadlines using official sources.',
+    'tabs.ask': 'Ask',
+    'tabs.schemes': 'Schemes',
+    'tabs.eligibility': 'Eligibility',
+    emptyTitle: 'You can ask me anything',
+    'schemes.title': 'Government Schemes',
+    'schemes.verifyBanner': 'Verify information on the official portal.',
+    'schemes.openOfficial': 'Open Official Website',
+    'schemes.lastVerified': 'Last verified',
+    'schemes.searchPlaceholder': 'Search schemes…',
+    'eligibility.title': 'Check Eligibility',
+    'eligibility.q1': 'What type of help do you need?',
+    'eligibility.q2': 'Which state or location do you live in?',
+    'eligibility.q3': 'Your education or work status?',
+    'eligibility.q4': 'Are you aware of the scheme’s requirements?',
+    'eligibility.q5': 'Which documents do you already have?',
+    'eligibility.submit': 'Next',
+    'eligibility.back': 'Back',
+    'eligibility.resultTitle': 'Preliminary guidance',
+    'eligibility.preliminaryNotice':
+      'Preliminary guidance, not an official government decision.',
+    'eligibility.nextSteps': 'Next steps',
+    'eligibility.checklist': 'Document checklist',
+    'eligibility.verifyReminder': 'Verify on the official portal.',
+    'eligibility.reset': 'Start over',
+  },
+};
+
+export const quickPromptsMr = [
+  'आज मला थोडं उदास वाटतंय. माझ्याशी बोलशील का?',
+  'मला माझ्या दिवसाचे नियोजन करण्यात मदत कर.',
+  'मला अभ्यासासाठी एक सोपा timetable बनव.',
+  'माझ्या interview साठी तयारी करून घे.',
+  'मला इंग्रजी बोलण्याचा सराव करायचा आहे.',
+  'शिष्यवृत्तीसाठी कोणती कागदपत्रे लागतात?',
+  'सरकारी योजनेसाठी अर्ज कसा करायचा?',
+];
+
+export const quickPromptsEn = [
+  'Help me plan my day.',
+  'I feel stressed. Can you talk with me?',
+  'Help me prepare for an interview.',
+  'Explain this topic simply.',
+];
+
+export const finalDisclaimer = {
+  mr: 'आर्या हे AI मार्गदर्शन साधन आहे. हे वैद्यकीय, कायदेशीर, आर्थिक किंवा सरकारी निर्णयाचा पर्याय नाही. सरकारी योजना, पात्रता आणि तारखा अधिकृत स्रोतांवर तपासा.',
+  en: 'Aarya is an AI guidance tool. It is not a medical, legal, financial or government authority. Verify government schemes, eligibility and deadlines using official sources.',
+};
