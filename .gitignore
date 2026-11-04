@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+build/
+.easignore
+
+# Environment (NEVER commit secrets)
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+*.tsbuildinfo
+coverage/
+
+# Server build
+server/dist/
+
+# Signing keys
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+GoogleService-Info.plist
