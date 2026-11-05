@@ -11,6 +11,12 @@ router.get('/models', (_req, res) => {
   res.json({ models: MODELS });
 });
 
+const out = await callAI({
+  message,
+  language: language ?? 'mr',  // ✅ to this
+  history: history ?? [],
+  modelId,
+});
 router.post('/', chatLimiter, async (req, res) => {
   const parsed = parseBody(ChatBodySchema, req.body);
   if (!parsed.ok) return res.status(400).json({ error: parsed.error });
