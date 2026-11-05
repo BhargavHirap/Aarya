@@ -14,6 +14,7 @@ export const ChatBodySchema = z.object({
   message: z.string().trim().min(1).max(MAX_INPUT),
   language: LanguageSchema.default('mr'),
   history: z.array(MessageSchema).max(MAX_HISTORY).optional(),
+  modelId: z.string().max(100).optional(),
 });
 
 export const EligibilityBodySchema = z.object({
