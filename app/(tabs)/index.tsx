@@ -43,6 +43,35 @@ import type { ModelInfo } from '../../lib/api';
     }
     startListening();
   };
+  <View style={styles.modelBar}>
+  <Pressable onPress={() => setPickerOpen((o) => !o)} style={styles.modelChip}>
+    <Text style={styles.modelChipText}>
+      {models.find((m) => m.id === modelId)?.name || 'Model'} ▾
+    </Text>
+  </Pressable>
+  <Pressable
+    onPress={toggleConsensus}
+    style={[styles.modelChip, consensusMode && styles.modelChipActive]}
+  >
+    <Text style={[styles.modelChipText, consensusMode && { color: '#FFF' }]}>
+      🧠 Consensus {consensusMode ? 'ON' : 'OFF'}
+    </Text>
+  </Pressable>
+</View>
+{pickerOpen && (
+  <View style={styles.pickerList}>
+    {models.map((m) => (
+      <Pressable
+        key={m.id}
+        onPress={() => { setModelId(m.id); setPickerOpen(false); }}
+        style={[styles.pickerItem, m.id === modelId && { backgroundColor: '#E6F2F1' }]}
+      >
+        <Text style={styles.pickerItemName}>{m.name}</Text>
+        <Text style={styles.pickerItemDesc}>{m.description}</Text>
+      </Pressable>
+    ))}
+  </View>
+)}
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -166,4 +195,12 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
   },
   shortcutText: { color: theme.colors.text, fontSize: 13, fontWeight: '600' },
+  modelBar: { flexDirection: 'row', gap: 8, paddingHorizontal: theme.spacing.md, paddingVertical: 6 },
+modelChip: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: theme.colors.card, borderRadius: theme.radii.pill, borderWidth: 1, borderColor: theme.colors.border },
+modelChipActive: { backgroundColor: theme.colors.teal, borderColor: theme.colors.teal },
+modelChipText: { fontSize: 12, color: theme.colors.text, fontWeight: '600' },
+pickerList: { backgroundColor: theme.colors.card, marginHorizontal: theme.spacing.md, borderRadius: theme.radii.md, padding: 4, marginBottom: 6 },
+pickerItem: { padding: 10, borderRadius: theme.radii.sm, marginBottom: 2 },
+pickerItemName: { fontSize: 14, fontWeight: '700', color: theme.colors.text },
+pickerItemDesc: { fontSize: 12, color: theme.colors.muted, marginTop: 2 },
 });
