@@ -21,7 +21,8 @@ export default function AskScreen() {
   const { messages, isThinking, error, send, retry, clearChat } = useChat();
   const { speak, ttsAvailable, startListening, isListening, sttAvailable } = useVoice();
   const listRef = useRef<FlatList<Message>>(null);
-
+import { listModels, generateImage } from '../../lib/api';
+import type { ModelInfo } from '../../lib/api';
   useEffect(() => {
     if (messages.length) {
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
