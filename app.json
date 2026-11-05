@@ -19,7 +19,7 @@
       "package": "com.aarya.app",
       "permissions": ["RECORD_AUDIO"]
     },
-    "plugins": ["expo-router", "expo-speech", "expo-av"],
+    "plugins": ["expo-router"],
     "extra": { "router": { "origin": false } }
   }
 }
