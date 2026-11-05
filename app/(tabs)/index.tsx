@@ -14,6 +14,13 @@ import { EmptyState } from '../../components/EmptyState';
 import { LanguageSwitch } from '../../components/LanguageSwitch';
 import { Disclaimer } from '../../components/Disclaimer';
 import type { Message } from '../../lib/types';
+const { modelId, setModelId, consensusMode, toggleConsensus } = useSession();
+const [models, setModels] = useState<ModelInfo[]>([]);
+const [pickerOpen, setPickerOpen] = useState(false);
+
+useEffect(() => {
+  listModels().then(setModels).catch(() => {});
+}, []);
 
 export default function AskScreen() {
   const language = useSession((s) => s.language);
